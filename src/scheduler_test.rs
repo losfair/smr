@@ -67,7 +67,7 @@ async fn test_sched_scale_out_in() {
   let pm = PM.lock().clone();
   let sched = Scheduler::<u64, _>::new(pm);
   let mut handles = vec![];
-  for _ in 0..8 {
+  for _ in 0..16 {
     let sched = sched.clone();
     let h = tokio::spawn(async move {
       for _ in 0..30 {
@@ -114,7 +114,7 @@ async fn test_sched_crash() {
   tokio::time::sleep(Duration::from_millis(500)).await;
   log::info!("Testing recovery.");
   let mut handles = vec![];
-  for _ in 0..8 {
+  for _ in 0..16 {
     let sched = sched.clone();
     let h = tokio::spawn(async move {
       for _ in 0..30 {
