@@ -1,0 +1,36 @@
+[package]
+name = "smr"
+version = "0.1.0"
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+ipc-channel = "0.15"
+serde = { version = "1", features = ["derive"] }
+nix = "0.22"
+tokio = { version = "1", features = ["full"] }
+anyhow = "1"
+thiserror = "1"
+parking_lot = "0.11.2"
+async-trait = "0.1.51"
+log = "0.4"
+pretty_env_logger = "0.4"
+futures = "0.3"
+procfs = "0.10.1"
+rand = "0.8"
+ringbuffer = { version = "0.8", default-features = false }
+crossbeam = "0.8.1"
+prctl = "1.0.0"
+syscallz = "0.16"
+async-io = "1.6.0"
+filedescriptor = "0.8.1"
+phf = { version = "0.10", features = ["macros"] }
+
+[dev-dependencies]
+criterion = "0.3"
+ctor = "0.1.21"
+
+[[bench]]
+name = "pm_bench"
+harness = false
