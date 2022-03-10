@@ -1,5 +1,6 @@
 pub mod config;
 mod entry;
+pub mod error;
 pub mod pm;
 pub mod scheduler;
 pub mod types;

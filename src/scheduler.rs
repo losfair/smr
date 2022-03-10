@@ -244,6 +244,11 @@ impl<K: Eq + Hash + Debug + Display + Clone + Send + Sync + 'static, Req: Reques
     }
   }
 
+  pub async fn terminate_worker(self_wrapper: &RwLock<Self>, k: &K) -> bool {
+    let mut me = self_wrapper.write().await;
+    me.app_workers.remove(k).is_some()
+  }
+
   pub async fn get_worker(
     self_wrapper: &RwLock<Self>,
     k: &K,
