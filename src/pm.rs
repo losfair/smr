@@ -30,6 +30,7 @@ use tokio::{
 use crate::{
   config::PID_OVERRIDE,
   entry::{pm_secure_entry_bootstrap, pm_start_time, root_pid, set_worker_process_name},
+  error::WorkerCrashed,
   types::{BaseRequest, InitData, Request},
 };
 
@@ -191,10 +192,6 @@ impl<Req: Request> WorkerManager<Req> {
     #[error("invoke error: {0}")]
     struct InvokeError(String);
 
-    #[derive(Error, Debug)]
-    #[error("worker terminated")]
-    struct WorkerTerminated;
-
     // Allocate task id.
     let task_id = self.next_task_id.fetch_add(1, Ordering::Relaxed);
 
@@ -204,7 +201,7 @@ impl<Req: Request> WorkerManager<Req> {
       Some(x) => {
         x.insert(task_id, tx);
       }
-      None => return Err(WorkerTerminated.into()),
+      None => return Err(WorkerCrashed.into()),
     }
 
     // Prepare for completion.
@@ -241,7 +238,7 @@ impl<Req: Request> WorkerManager<Req> {
     })?;
     let res = match rx.await {
       Ok(x) => x.map_err(|x| anyhow::Error::from(InvokeError(x))),
-      Err(_) => Err(WorkerTerminated.into()),
+      Err(_) => Err(WorkerCrashed.into()),
     };
     cg.should_cancel = false;
     res
