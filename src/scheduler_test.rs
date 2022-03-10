@@ -1,7 +1,7 @@
 use std::time::Duration;
 
 use crate::{
-  error::WorkerTerminated,
+  error::WorkerCrashed,
   pm::{pm_start, PmHandle},
   scheduler::Scheduler,
   types::{BaseRequest, InitData, Request, Response},
@@ -150,10 +150,7 @@ async fn test_sched_crash() {
         let w = Scheduler::get_worker(&sched, &0u64, || Default::default()).await;
         if let Ok(w) = w {
           let ret = w.invoke(GenReq::Crash).await;
-          assert!(ret
-            .unwrap_err()
-            .downcast_ref::<WorkerTerminated>()
-            .is_some());
+          assert!(ret.unwrap_err().downcast_ref::<WorkerCrashed>().is_some());
         }
         tokio::time::sleep(Duration::from_millis(60)).await;
       }
