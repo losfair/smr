@@ -27,7 +27,6 @@ ringbuffer = { version = "0.8", default-features = false }
 crossbeam = "0.8.1"
 prctl = "1.0.0"
 syscallz = "0.16"
-async-io = "1.6.0"
 filedescriptor = "0.8.1"
 phf = { version = "0.10", features = ["macros"] }
 
